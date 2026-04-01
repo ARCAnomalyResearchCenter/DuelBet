@@ -693,11 +693,9 @@ export default function App() {
   const [balance, setBalance] = useState(5000);
   const [toasts, setToasts] = useState([]);
   const [feed, setFeed] = useState([]);
-  const [adminOpen, setAdminOpen] = useState(false);
   const [newMatch, setNewMatch] = useState({ p1: "", p2: "", game: "cs2", stream: "", question: "" });
   const [myBets, setMyBets] = useState([]);
   const feedTimer = useRef(null);
-  const toastTimer = useRef(null);
 
   const addToast = (text, icon = "✅") => {
     const id = Date.now();
@@ -732,7 +730,8 @@ export default function App() {
       i++;
     }, 2500);
     return () => clearInterval(feedTimer.current);
-  }, [selectedMatch?.id]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selectedMatch?.id, selectedMatch]);
 
   const openMatch = (m) => {
     setSelectedMatch(m);
@@ -767,7 +766,6 @@ export default function App() {
     };
     setMatches((prev) => [m, ...prev]);
     setNewMatch({ p1: "", p2: "", game: "cs2", stream: "", question: "" });
-    setAdminOpen(false);
     addToast("Матч создан! Ссылка скопирована 🔗", "🎉");
     setPage("home");
   };
@@ -1116,7 +1114,7 @@ export default function App() {
             <div style={{ padding: "12px 20px" }}>
               {matches.filter((m) => m.status === "live").map((m) => (
                 <div key={m.id} style={{
-                  display: "flex", alignItems: "center", gap: 12, padding: "12px 0",
+                  display: "flex", alignItems: "center", padding: "12px 0",
                   borderBottom: "1px solid var(--border)", flexWrap: "wrap", gap: 12
                 }}>
                   <div style={{ flex: 1 }}>
